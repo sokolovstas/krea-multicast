@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <video id="media_player" src="toi://" autoplay></video>
+    <div id="test"></div>
+
+    <script>
+      const bootstrapUrl = 'http://localhost:8000/toi/toi.js';
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', bootstrapUrl, false);
+      let retrievalFailed = false;
+      try {
+        xhr.send();
+        if (xhr.readyState != 4 || xhr.status != 200) {
+          retrievalFailed = true;
+        }
+      } catch (e) {
+        retrievalFailed = true;
+      }
+      if (retrievalFailed) {
+        reject('Unable to retrieve ' + bootstrapUrl);
+      }
+      eval.call(window || this, xhr.responseText);
+      window.toi = new Toi();
+
+      document.addEventListener('keydown', (e) => {
+        try {
+          console.log(e.keyCode);
+          if (e.keyCode === 917536) {
+            window.location.reload();
+            return;
+          }
+          this.player = window.toi.mediaService.createPlayerInstance();
+
+          document.querySelector('#test').innerHTML = window.location.href + 'sample.ts|LiveSource=true';
+
+          this.player.quickPlay(window.location.href + 'sample.ts|LiveSource=true');
+        } catch (e) {
+          window.location.reload();
+        }
+      });
+    </script>
+  </body>
+</html>
