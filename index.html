@@ -27,21 +27,34 @@
       }
       eval.call(window || this, xhr.responseText);
       window.toi = new Toi();
+      this.player = window.toi.mediaService.createPlayerInstance();
 
       document.addEventListener('keydown', (e) => {
         try {
           console.log(e.keyCode);
-          if (e.keyCode === 917536) {
+          if (e.keyCode == 917536) {
             window.location.reload();
+
             return;
           }
-          this.player = window.toi.mediaService.createPlayerInstance();
-
-          document.querySelector('#test').innerHTML = window.location.href + 'sample.ts|LiveSource=true';
-
-          this.player.quickPlay(window.location.href + 'sample.ts|LiveSource=true');
+          if (e.keyCode == 917528) {
+            this.player.play(window.toi.consts.ToiMediaPlayerBase.PACE_PAUSE);
+            return;
+          }
+          if (e.keyCode == 917522) {
+            console.log(JSON.stringify(player.getTimeshiftInfo()));
+            this.player.close();
+            return;
+          }
+          if (e.keyCode == 13) {
+            document.querySelector('#test').innerHTML =
+              window.location.href + 'sample.ts|LiveSource=true&PauseBlack=false&CloseBlack=false';
+            this.player.quickPlay(
+              'http://localhost:8080/udp/239.65.202.2:5000|LiveSource=true&PauseBlack=false&CloseBlack=false&errorrecovery=low&startmode=fast'
+            );
+          }
         } catch (e) {
-          window.location.reload();
+          console.error(e);
         }
       });
     </script>
